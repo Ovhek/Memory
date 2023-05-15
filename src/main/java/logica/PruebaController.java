@@ -68,10 +68,10 @@ public class PruebaController implements Initializable {
     
      private void initializeImageView()
     {
-        for (int i=0; i<flowPane.getChildren().size();i++)
+        for (int i=0; i<hbox1.getChildren().size();i++)
         {
             //"cast" the Node to be of type ImageView
-            ImageView imageView = (ImageView) flowPane.getChildren().get(i);
+            ImageView imageView = (ImageView) hbox1.getChildren().get(i);
             imageView.setImage(new Image("images/back_of_card.png"));
             imageView.setUserData(i);
 

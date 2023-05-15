@@ -1,6 +1,5 @@
 package logica;
 
-
 import common.Article;
 import common.Compra;
 import common.CompraException;

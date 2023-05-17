@@ -22,24 +22,24 @@ import javafx.scene.control.ButtonType;
  */
 public class MainController implements Initializable {
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
+    @FXML
     private ResourceBundle resources;
 
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    @FXML
     private URL location;
 
-    @FXML // fx:id="btnHallOfFame"
-    private Button btnHallOfFame; // Value injected by FXMLLoader
+    @FXML
+    private Button btnHallOfFame;
 
-    @FXML // fx:id="btnNewGame"
-    private Button btnNewGame; // Value injected by FXMLLoader
+    @FXML
+    private Button btnNewGame;
 
-    @FXML // fx:id="btnExit"
-    private Button btnExit; // Value injected by FXMLLoader
+    @FXML
+    private Button btnExit;
 
     @FXML
     void onActionNewGame(ActionEvent event) throws IOException {
-        App.setRoot("prueba");
+        App.setRoot("game");
     }
 
     @FXML
@@ -69,7 +69,6 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
     }
 
 }

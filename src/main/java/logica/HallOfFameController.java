@@ -19,17 +19,17 @@ import javafx.scene.control.ListView;
  */
 public class HallOfFameController implements Initializable {
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
+    @FXML
     private ResourceBundle resources;
 
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    @FXML
     private URL location;
 
-    @FXML // fx:id="lvScore"
-    private ListView<?> lvScore; // Value injected by FXMLLoader
+    @FXML
+    private ListView<?> lvScores;
 
-    @FXML // fx:id="btnMenuPrincipal"
-    private Button btnMenuPrincipal; // Value injected by FXMLLoader
+    @FXML
+    private Button btnMenuPrincipal;
 
     @FXML
     void onActionMenuPrincipal(ActionEvent event) throws IOException {

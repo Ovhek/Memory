@@ -4,6 +4,7 @@
  */
 package logica;
 
+import common.Utils;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -49,22 +50,7 @@ public class MainController implements Initializable {
 
     @FXML
     void onActionExit(ActionEvent event) {
-        mostrarDialogoConfirmacion("¿Deseas salir del juego?");
-    }
-    
-    // Alerta de confirmación al salir de la app
-    public void mostrarDialogoConfirmacion(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Diálogo de confirmación...");
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-
-        Optional<ButtonType> resultado = alert.showAndWait();
-        if (resultado.isPresent()) {
-            if (resultado.get() == ButtonType.OK) {
-                Platform.exit();
-            }
-        }
+        Utils.mostrarDialogoConfirmacion("¿Deseas salir del juego?");
     }
 
     @Override

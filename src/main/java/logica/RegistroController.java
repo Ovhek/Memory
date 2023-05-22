@@ -7,16 +7,14 @@ package logica;
 import common.Jugador;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import main.JugadorEJB;
 
 /**
  *
@@ -30,36 +28,29 @@ public class RegistroController implements Initializable {
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
 
-    @FXML // fx:id="txtEmail"
+    @FXML
     private TextField txtEmail; // Value injected by FXMLLoader
 
-    @FXML // fx:id="btnRegistro"
+    @FXML
     private Button btnRegistro; // Value injected by FXMLLoader
 
-    @FXML // fx:id="txtUsuario"
+    @FXML
     private TextField txtUsuario; // Value injected by FXMLLoader
 
     @FXML
-    void onActionRegistrar(ActionEvent event) throws IOException {
-        Jugador jugador = new Jugador();
-        jugador.setNombre(txtUsuario.getText());
-        jugador.setEmail(txtEmail.getText());
-        System.out.println("Player: " + jugador);
-        App.setRoot("main");
-    }
-    
-    // Alerta de confirmación al salir de la app
-    public void mostrarDialogoConfirmacion(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Diálogo de confirmación...");
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
+    private TextArea lvLogger;
 
-        Optional<ButtonType> resultado = alert.showAndWait();
-        if (resultado.isPresent()) {
-            if (resultado.get() == ButtonType.OK) {
-                Platform.exit();
-            }
+    private JugadorEJB jugadorEJB;
+
+    @FXML
+    void onActionRegistrar(ActionEvent event) throws IOException, Exception {
+        try {
+            Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
+            jugadorEJB.registrarUsuario(jugador);
+            lvLogger.appendText("El usuario se ha registrado correctamente.");
+            App.setRoot("main");
+        } catch (Exception ex){
+            lvLogger.appendText("El usuario no se ha podido registrar.");
         }
     }
 

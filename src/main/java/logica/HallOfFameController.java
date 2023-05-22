@@ -4,6 +4,7 @@
  */
 package logica;
 
+import common.Utils;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 
 /**
  *
@@ -30,6 +32,9 @@ public class HallOfFameController implements Initializable {
 
     @FXML
     private Button btnMenuPrincipal;
+    
+    @FXML
+    private TextArea lvLogger;
 
     @FXML
     void onActionMenuPrincipal(ActionEvent event) throws IOException {
@@ -38,6 +43,12 @@ public class HallOfFameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        try {
+            //cargar puntuaciones de la BBDD
+            lvLogger.appendText("Las puntuaciones están actualizadas a " + Utils.getCurrentDateTime());
+        } catch (Exception ex) {
+            lvLogger.appendText("No se han podido cargar las puntuaciones.");
+        }
     }
 
 }

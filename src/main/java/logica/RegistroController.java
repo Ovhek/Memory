@@ -5,15 +5,21 @@
 package logica;
 
 import common.Jugador;
+import common.Utils;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.UserTransaction;
 import main.JugadorEJB;
 
 /**
@@ -41,16 +47,22 @@ public class RegistroController implements Initializable {
     private TextArea lvLogger;
 
     private JugadorEJB jugadorEJB;
+    @PersistenceContext(unitName = "Exemple1PersistenceUnit")
+    private EntityManager em;
+    
+    @Inject
+    private UserTransaction userTransaction;
 
     @FXML
     void onActionRegistrar(ActionEvent event) throws IOException, Exception {
         try {
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
             jugadorEJB.registrarUsuario(jugador);
-            lvLogger.appendText("El usuario se ha registrado correctamente.");
+            Utils.persisteixAmbTransaccio(jugador, userTransaction, em, Logger.global);
+            lvLogger.appendText("El usuario se ha registrado correctamente.\n");
             App.setRoot("main");
         } catch (Exception ex){
-            lvLogger.appendText("El usuario no se ha podido registrar.");
+            lvLogger.appendText("El usuario no se ha podido registrar.\n");
         }
     }
 

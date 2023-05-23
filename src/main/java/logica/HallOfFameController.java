@@ -45,9 +45,9 @@ public class HallOfFameController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             //cargar puntuaciones de la BBDD
-            lvLogger.appendText("Las puntuaciones están actualizadas a " + Utils.getCurrentDateTime());
+            lvLogger.appendText("Las puntuaciones están actualizadas a " + Utils.getCurrentDateTime() + "\n");
         } catch (Exception ex) {
-            lvLogger.appendText("No se han podido cargar las puntuaciones.");
+            lvLogger.appendText("No se han podido cargar las puntuaciones.\n");
         }
     }
 

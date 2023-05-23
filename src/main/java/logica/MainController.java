@@ -7,15 +7,11 @@ package logica;
 import common.Utils;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 
 /**
  *
@@ -37,6 +33,7 @@ public class MainController implements Initializable {
 
     @FXML
     private Button btnExit;
+    
 
     @FXML
     void onActionNewGame(ActionEvent event) throws IOException {
@@ -50,7 +47,7 @@ public class MainController implements Initializable {
 
     @FXML
     void onActionExit(ActionEvent event) {
-        Utils.mostrarDialogoConfirmacion("¿Deseas salir del juego?");
+        Utils.alertExit();
     }
 
     @Override

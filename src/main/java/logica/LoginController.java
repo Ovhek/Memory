@@ -50,10 +50,10 @@ public class LoginController implements Initializable {
         try {
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
             jugadorEJB.getSesion(jugador);
-            lvLogger.appendText("El usuario se ha logueado correctamente.");
+            lvLogger.appendText("El usuario se ha logueado correctamente.\n");
             App.setRoot("main");
         } catch (Exception ex) {
-            lvLogger.appendText("El usuario no ha podido loguearse. Revisa las credenciales.");
+            lvLogger.appendText("El usuario no ha podido loguearse. Revisa las credenciales.\n");
         }
     }
 

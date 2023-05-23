@@ -4,8 +4,12 @@
  */
 package logica;
 
+import common.Utils;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -38,7 +42,7 @@ public class GameController implements Initializable {
     @FXML
     private Label lbTiempo;
 
-    private static int cuentaAtras = 300;
+    private static int cuentaAtras = 30;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -63,8 +67,12 @@ public class GameController implements Initializable {
 
         timeline.setCycleCount(cuentaAtras + 1);
         timeline.setOnFinished(event -> {
-            lbTiempo.setText("¡Tiempo finalizado!");
-            // Añadir el código para ejecutar acciones al finalizar la cuenta atrás
+            Utils.alertTime();
+            try {
+                App.setRoot("hallOfFame");
+            } catch (IOException ex) {
+                Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
 
         timeline.play();

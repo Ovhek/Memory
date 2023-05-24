@@ -15,12 +15,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import logica.utils.LoadFXML;
+import presentacion.PresentationLayer;
 
 /**
  *
  * @author ivan
  */
-public class MainController implements Initializable {
+public class MainController extends PresentationLayer implements Initializable {
 
     @FXML
     private ResourceBundle resources;
@@ -36,15 +38,17 @@ public class MainController implements Initializable {
 
     @FXML
     private Button btnExit;
+    
+    private LoadFXML loadFXML = new LoadFXML();
 
     @FXML
     void onActionNewGame(ActionEvent event) throws IOException {
-        App.setRoot("game");
+        loadFXML.changeScreen("logica/game.fxml", btnNewGame);
     }
 
     @FXML
     void onActionHallOfFame(ActionEvent event) throws IOException {
-        App.setRoot("hallOfFame");
+       loadFXML.changeScreen("logica/hallOfFame.fxml", btnHallOfFame);
     }
 
     @FXML
@@ -69,6 +73,12 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Manager.getInstance().addController(this);
+    }
+
+    @Override
+    public void close() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

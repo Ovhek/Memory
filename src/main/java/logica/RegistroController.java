@@ -4,7 +4,7 @@
  */
 package logica;
 
-import common.IJugador;
+import common.IJuego;
 import common.Jugador;
 import common.Lookups;
 import java.io.IOException;
@@ -18,9 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javax.inject.Inject;
 import javax.naming.NamingException;
-import javax.transaction.UserTransaction;
 
 /**
  *
@@ -49,13 +47,13 @@ public class RegistroController implements Initializable {
     @FXML
     private TextArea lvLogger;
 
-    private IJugador jugadorEJB;
+    private IJuego juegoEJB;
 
     @FXML
     void onActionRegistrar(ActionEvent event) throws IOException, Exception {
         try {
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
-            jugadorEJB.registrarUsuario(jugador);
+            juegoEJB.registrarUsuario(jugador);
             lvLogger.appendText("El usuario se ha registrado correctamente.\n");
             App.setRoot("login");
         } catch (Exception ex){
@@ -71,7 +69,7 @@ public class RegistroController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            jugadorEJB = Lookups.jugadorEJBRemoteLookup();
+            juegoEJB = Lookups.juegoEJBRemoteLookup();
         } catch (NamingException ex) {
             Logger.getLogger(RegistroController.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -4,7 +4,7 @@
  */
 package logica;
 
-import common.IJugador;
+import common.IJuego;
 import common.Jugador;
 import common.Lookups;
 import common.Utils;
@@ -48,13 +48,13 @@ public class LoginController implements Initializable {
     @FXML
     private TextArea lvLogger;
 
-    private IJugador jugadorEJB;
+    private IJuego juegoEJB;
 
     @FXML
     void onActionLogin(ActionEvent event) throws IOException {
         try {
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
-            jugadorEJB.getSesion(jugador);
+            juegoEJB.getSesion(jugador);
             Utils.login = true;
             App.setRoot("main");
         } catch (Exception ex) {
@@ -70,7 +70,7 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            jugadorEJB = Lookups.jugadorEJBRemoteLookup();
+            juegoEJB = Lookups.juegoEJBRemoteLookup();
         } catch (NamingException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }

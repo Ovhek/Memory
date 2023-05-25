@@ -33,21 +33,35 @@ public class MainController implements Initializable {
 
     @FXML
     private Button btnExit;
-    
 
     @FXML
     void onActionNewGame(ActionEvent event) throws IOException {
-        App.setRoot("game");
+        if (!Utils.login) {
+            Utils.alertLogin();
+            App.setRoot("login");
+        } else {
+            App.setRoot("game");
+        }
     }
 
     @FXML
     void onActionHallOfFame(ActionEvent event) throws IOException {
-        App.setRoot("hallOfFame");
+        if (!Utils.login) {
+            Utils.alertLogin();
+            App.setRoot("login");
+        } else {
+            App.setRoot("hallOfFame");
+        }
     }
 
     @FXML
-    void onActionExit(ActionEvent event) {
-        Utils.alertExit();
+    void onActionExit(ActionEvent event) throws IOException {
+        if (!Utils.login) {
+            Utils.alertLogin();
+            App.setRoot("login");
+        } else {
+            Utils.alertExit();
+        }
     }
 
     @Override

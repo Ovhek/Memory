@@ -12,8 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -41,8 +43,11 @@ public class GameController implements Initializable {
 
     @FXML
     private Label lbTiempo;
+    
+    @FXML
+    private Button btnExitGame;
 
-    private static int cuentaAtras = 30;
+    private int cuentaAtras;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -57,6 +62,7 @@ public class GameController implements Initializable {
      * Inicializar la cuenta atrás
      */
     private void cuentaAtras() {
+        cuentaAtras = 30;
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(10), event -> {
                     lbTiempo.setText(formatTimeMillis(cuentaAtras * 1000));
@@ -99,6 +105,11 @@ public class GameController implements Initializable {
         int seconds = (milliseconds / 1000) % 60;
         int millis = milliseconds % 1000;
         return String.format("%02d:%02d:%03d", minutes, seconds, millis);
+    }
+    
+    @FXML
+    void onActionExitGame(ActionEvent event) throws IOException {
+        App.setRoot("main");
     }
 
 

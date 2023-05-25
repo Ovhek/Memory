@@ -4,17 +4,22 @@
  */
 package logica;
 
+import common.IJugador;
 import common.Jugador;
+import common.Lookups;
+import common.Utils;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import main.JugadorEJB;
+import javax.naming.NamingException;
 
 /**
  *
@@ -43,14 +48,14 @@ public class LoginController implements Initializable {
     @FXML
     private TextArea lvLogger;
 
-    private JugadorEJB jugadorEJB;
+    private IJugador jugadorEJB;
 
     @FXML
     void onActionLogin(ActionEvent event) throws IOException {
         try {
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
             jugadorEJB.getSesion(jugador);
-            lvLogger.appendText("El usuario se ha logueado correctamente.\n");
+            Utils.login = true;
             App.setRoot("main");
         } catch (Exception ex) {
             lvLogger.appendText("El usuario no ha podido loguearse. Revisa las credenciales.\n");
@@ -64,6 +69,11 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        try {
+            jugadorEJB = Lookups.jugadorEJBRemoteLookup();
+        } catch (NamingException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

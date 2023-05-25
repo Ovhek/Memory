@@ -4,11 +4,13 @@
  */
 package logica;
 
+import common.IJugador;
 import common.Jugador;
-import common.Utils;
+import common.Lookups;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,10 +19,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.naming.NamingException;
 import javax.transaction.UserTransaction;
-import main.JugadorEJB;
 
 /**
  *
@@ -35,39 +35,46 @@ public class RegistroController implements Initializable {
     private URL location;
 
     @FXML
-    private TextField txtEmail; // Value injected by FXMLLoader
+    private TextField txtEmail;
 
     @FXML
-    private Button btnRegistro; // Value injected by FXMLLoader
+    private Button btnRegistro;
+    
+    @FXML
+    private Button btnAtras;
 
     @FXML
-    private TextField txtUsuario; // Value injected by FXMLLoader
+    private TextField txtUsuario;
 
     @FXML
     private TextArea lvLogger;
 
-    private JugadorEJB jugadorEJB;
-    @PersistenceContext(unitName = "Exemple1PersistenceUnit")
-    private EntityManager em;
-    
-    @Inject
-    private UserTransaction userTransaction;
+    private IJugador jugadorEJB;
 
     @FXML
     void onActionRegistrar(ActionEvent event) throws IOException, Exception {
         try {
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
             jugadorEJB.registrarUsuario(jugador);
-            Utils.persisteixAmbTransaccio(jugador, userTransaction, em, Logger.global);
             lvLogger.appendText("El usuario se ha registrado correctamente.\n");
-            App.setRoot("main");
+            App.setRoot("login");
         } catch (Exception ex){
             lvLogger.appendText("El usuario no se ha podido registrar.\n");
         }
     }
+    
+    @FXML
+    void onActionBack(ActionEvent event) throws IOException {
+        App.setRoot("login");
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        try {
+            jugadorEJB = Lookups.jugadorEJBRemoteLookup();
+        } catch (NamingException ex) {
+            Logger.getLogger(RegistroController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

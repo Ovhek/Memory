@@ -59,7 +59,7 @@ public class LoginController extends PresentationLayer implements Initializable 
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
             juegoEJB.getSesion(jugador);
             Utils.login = true;
-            loadFXML.changeScreen("main", btnLogin);
+            loadFXML.changeScreen("logica/main.fxml", btnLogin);
         } catch (Exception ex) {
             lvLogger.appendText("El usuario no ha podido loguearse. Revisa las credenciales.\n");
         }

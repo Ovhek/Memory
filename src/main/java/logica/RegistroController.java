@@ -53,7 +53,7 @@ public class RegistroController extends PresentationLayer implements Initializab
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
             juegoEJB.registrarUsuario(jugador);
             lvLogger.appendText("El usuario se ha registrado correctamente.\n");
-            loadFXML.changeScreen("login", btnRegistro);
+            loadFXML.changeScreen("logica/login.fxml", btnRegistro);
         } catch (Exception ex){
             lvLogger.appendText("El usuario no se ha podido registrar.\n");
         }
@@ -61,7 +61,7 @@ public class RegistroController extends PresentationLayer implements Initializab
     
     @FXML
     void onActionBack(ActionEvent event) throws IOException {
-         loadFXML.changeScreen("login", btnRegistro);
+         loadFXML.changeScreen("logica/login.fxml", btnRegistro);
     }
 
     @Override

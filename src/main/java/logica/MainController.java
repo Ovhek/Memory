@@ -42,9 +42,9 @@ public class MainController extends PresentationLayer implements Initializable {
     void onActionNewGame(ActionEvent event) throws IOException {
         if (!Utils.login) {
             Utils.alertLogin();
-            loadFXML.changeScreen("login", btnNewGame);
+            loadFXML.changeScreen("logica/login.fxml", btnNewGame);
         } else {
-            loadFXML.changeScreen("game", btnNewGame);
+            loadFXML.changeScreen("logica/game.fxml", btnNewGame);
         }
     }
 
@@ -52,9 +52,9 @@ public class MainController extends PresentationLayer implements Initializable {
     void onActionHallOfFame(ActionEvent event) throws IOException {
         if (!Utils.login) {
             Utils.alertLogin();
-            loadFXML.changeScreen("login", btnNewGame);
+            loadFXML.changeScreen("logica/login.fxml", btnNewGame);
         } else {
-            loadFXML.changeScreen("hallOfFame", btnNewGame);
+            loadFXML.changeScreen("logica/hallOfFame.fxml", btnNewGame);
         }
     }
 
@@ -62,7 +62,7 @@ public class MainController extends PresentationLayer implements Initializable {
     void onActionExit(ActionEvent event) throws IOException {
         if (!Utils.login) {
             Utils.alertLogin();
-            loadFXML.changeScreen("login", btnNewGame);
+            loadFXML.changeScreen("logica/login.fxml", btnNewGame);
         } else {
             Utils.alertExit();
         }

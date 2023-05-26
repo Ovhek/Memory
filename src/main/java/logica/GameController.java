@@ -173,7 +173,7 @@ public class GameController extends PresentationLayer implements Initializable {
         timeline.setCycleCount(cuentaAtras + 1);
         timeline.setOnFinished(event -> {
             Utils.alertTime();
-            loadFXML.changeScreen("hallOfFame", btn_salirPartida);
+            loadFXML.changeScreen("logica/hallOfFame.fxml", btn_salirPartida);
 
         });
 
@@ -183,7 +183,7 @@ public class GameController extends PresentationLayer implements Initializable {
     @FXML
     void onActionSalirPartida(ActionEvent event) {
         timeline.stop();
-        loadFXML.changeScreen("main", btn_salirPartida);
+        loadFXML.changeScreen("logica/main.fxml", btn_salirPartida);
     }
 
     @Override

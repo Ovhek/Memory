@@ -42,7 +42,7 @@ public class HallOfFameController extends PresentationLayer implements Initializ
 
     @FXML
     void onActionMenuPrincipal(ActionEvent event) throws IOException {
-        loadFXML.changeScreen("main", btnMenuPrincipal);
+        loadFXML.changeScreen("logica/main.fxml", btnMenuPrincipal);
     }
 
     @Override

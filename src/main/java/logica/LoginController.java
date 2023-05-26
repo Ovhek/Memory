@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javax.naming.NamingException;
+import static logica.App.juegoEJB;
 
 /**
  *
@@ -48,8 +49,6 @@ public class LoginController implements Initializable {
     @FXML
     private TextArea lvLogger;
 
-    private IJuego juegoEJB;
-
     @FXML
     void onActionLogin(ActionEvent event) throws IOException {
         try {
@@ -69,11 +68,6 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            juegoEJB = Lookups.juegoEJBRemoteLookup();
-        } catch (NamingException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
 }

@@ -62,7 +62,7 @@ public class GameController implements Initializable {
      * Inicializar la cuenta atrás
      */
     private void cuentaAtras() {
-        cuentaAtras = 30;
+        cuentaAtras = 10;
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(10), event -> {
                     lbTiempo.setText(formatTimeMillis(cuentaAtras * 1000));

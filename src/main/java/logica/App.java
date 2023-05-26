@@ -23,35 +23,27 @@ public class App extends Application {
     private static Stage stage;
 
     @Override
-<<<<<<< HEAD
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException, NamingException {
         App.stage = stage;
         manager = Manager.getInstance();
 
         // Ventana Principal
         FXMLLoader fxmlPrimary;
 
-        fxmlPrimary = loadFXML("main");
+        fxmlPrimary = loadFXML("login");
         Scene scene = new Scene(fxmlPrimary.load());
 
-=======
-    public void start(Stage stage) throws IOException, NamingException {
-        scene = new Scene(loadFXML("login"));
->>>>>>> ad8e9a1d7f7c90b0ecf9e3a55dd3ca6bd3a80fa5
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
+
         Utils.playMusic();
         juegoEJB = Lookups.juegoEJBRemoteLookup();
+
     }
 
-<<<<<<< HEAD
-   private void setRoot(String fxml) throws IOException {
+    private void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml).load());
-=======
-    public static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
->>>>>>> ad8e9a1d7f7c90b0ecf9e3a55dd3ca6bd3a80fa5
     }
 
     private FXMLLoader loadFXML(String fxml) throws IOException {
@@ -62,7 +54,7 @@ public class App extends Application {
     public static void main(String[] args) {
         launch();
     }
-    
+
     @Override
     public void stop() {
 

@@ -48,6 +48,8 @@ public class GameController implements Initializable {
     private Button btnExitGame;
 
     private int cuentaAtras;
+    
+    private Timeline timeline;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -63,9 +65,9 @@ public class GameController implements Initializable {
      */
     private void cuentaAtras() {
         cuentaAtras = 10;
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(10), event -> {
-                    lbTiempo.setText(formatTimeMillis(cuentaAtras * 1000));
+        timeline = new Timeline(
+                new KeyFrame(Duration.seconds(0), event -> {
+                    lbTiempo.setText(Utils.formatTime(cuentaAtras));
                     cuentaAtras--;
                 }),
                 new KeyFrame(Duration.seconds(1))
@@ -75,6 +77,7 @@ public class GameController implements Initializable {
         timeline.setOnFinished(event -> {
             Utils.alertTime();
             try {
+                // Guardar puntuacion
                 App.setRoot("hallOfFame");
             } catch (IOException ex) {
                 Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
@@ -84,31 +87,9 @@ public class GameController implements Initializable {
         timeline.play();
     }
     
-    /**
-     * A partir de segundos, formatear en minutos y segundos
-     * @param seconds
-     * @return 
-     */
-    private String formatTime(int seconds) {
-        int minutes = seconds / 60;
-        int segundosRestantes = seconds % 60;
-        return String.format("%02d:%02d", minutes, segundosRestantes);
-    }
-
-    /**
-     * A partir de milisegundos, formatear en minutos, segundos y milisegundos
-     * @param milliseconds
-     * @return 
-     */
-    private String formatTimeMillis(int milliseconds) {
-        int minutes = (milliseconds / 1000) / 60;
-        int seconds = (milliseconds / 1000) % 60;
-        int millis = milliseconds % 1000;
-        return String.format("%02d:%02d:%03d", minutes, seconds, millis);
-    }
-    
     @FXML
     void onActionExitGame(ActionEvent event) throws IOException {
+        timeline.stop();
         App.setRoot("main");
     }
 

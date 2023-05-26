@@ -21,12 +21,14 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javax.naming.NamingException;
 import static logica.App.juegoEJB;
+import logica.utils.LoadFXML;
+import presentacion.PresentationLayer;
 
 /**
  *
  * @author ivan
  */
-public class LoginController implements Initializable {
+public class LoginController extends PresentationLayer implements Initializable {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -49,13 +51,15 @@ public class LoginController implements Initializable {
     @FXML
     private TextArea lvLogger;
 
+    private LoadFXML loadFXML = new LoadFXML();
+
     @FXML
     void onActionLogin(ActionEvent event) throws IOException {
         try {
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
             juegoEJB.getSesion(jugador);
             Utils.login = true;
-            App.setRoot("main");
+            loadFXML.changeScreen("logica/main.fxml", btnLogin);
         } catch (Exception ex) {
             lvLogger.appendText("El usuario no ha podido loguearse. Revisa las credenciales.\n");
         }
@@ -63,11 +67,17 @@ public class LoginController implements Initializable {
 
     @FXML
     void onActionRegistrar(ActionEvent event) throws IOException {
-        App.setRoot("registro");
+        loadFXML.changeScreen("logica/registro.fxml", btnLogin);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Manager.getInstance().addController(this);
+    }
+
+    @Override
+    public void close() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

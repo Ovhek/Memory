@@ -15,12 +15,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import static logica.App.juegoEJB;
+import logica.utils.LoadFXML;
+import presentacion.PresentationLayer;
 
 /**
  *
  * @author ivan
  */
-public class RegistroController implements Initializable {
+public class RegistroController extends PresentationLayer implements Initializable {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -42,6 +44,8 @@ public class RegistroController implements Initializable {
 
     @FXML
     private TextArea lvLogger;
+    
+    private LoadFXML loadFXML = new LoadFXML();
 
     @FXML
     void onActionRegistrar(ActionEvent event) throws IOException, Exception {
@@ -49,7 +53,7 @@ public class RegistroController implements Initializable {
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
             juegoEJB.registrarUsuario(jugador);
             lvLogger.appendText("El usuario se ha registrado correctamente.\n");
-            App.setRoot("login");
+            loadFXML.changeScreen("login", btnRegistro);
         } catch (Exception ex){
             lvLogger.appendText("El usuario no se ha podido registrar.\n");
         }
@@ -57,11 +61,17 @@ public class RegistroController implements Initializable {
     
     @FXML
     void onActionBack(ActionEvent event) throws IOException {
-        App.setRoot("login");
+         loadFXML.changeScreen("login", btnRegistro);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Manager.getInstance().addController(this);
+    }
+
+    @Override
+    public void close() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

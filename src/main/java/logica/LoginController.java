@@ -67,7 +67,7 @@ public class LoginController extends PresentationLayer implements Initializable 
 
     @FXML
     void onActionRegistrar(ActionEvent event) throws IOException {
-        loadFXML.changeScreen("registro", btnLogin);
+        loadFXML.changeScreen("logica/registro.fxml", btnLogin);
     }
 
     @Override

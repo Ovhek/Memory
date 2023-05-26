@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -7,6 +7,7 @@ package logica;
 
 import common.Carta;
 import common.MazoDeCartas;
+import common.Utils;
 import java.awt.geom.Rectangle2D;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,12 +16,14 @@ import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -58,21 +61,24 @@ public class GameController extends PresentationLayer implements Initializable {
     @FXML
     private Label lb_tiempo;
 
+    @FXML
+    private Button btn_salirPartida;
+
     private LoadFXML loadFXML = new LoadFXML();
 
-    private static int cuentaAtras = 300;
+    private int cuentaAtras;
+
+    private Timeline timeline;
     private int numColumnas, numFilas;
     private ArrayList<Integer> mazo = new ArrayList<>();
     private static final int NUM_COLUMNAS = 3;
     private MazoDeCartas mazoDeCartas;
-    
-    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         mazoDeCartas = new MazoDeCartas();
         mazoDeCartas.mezclar();
-        
+
         Manager.getInstance().addController(this);
 
         // Reiniciar los valores
@@ -151,143 +157,14 @@ public class GameController extends PresentationLayer implements Initializable {
 
     }
 
-    // Aquí debes implementar la lógica para obtener la imagen correspondiente
-    // a la carta específica. Puedes usar un mapa, una lista, o cualquier otra
-    // estructura de datos que asocie cada carta con su imagen frontal.
-    /**
-     * Inicializar la cuenta atrás
-     */
-    private void cuentaAtras() {
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(10), event -> {
-                    lb_tiempo.setText(formatTimeMillis(cuentaAtras * 1000));
-                    cuentaAtras--;
-                }),
-                new KeyFrame(Duration.seconds(1))
-        );
-
-        timeline.setCycleCount(cuentaAtras + 1);
-        timeline.setOnFinished(event -> {
-            lb_tiempo.setText("¡Tiempo finalizado!");
-            // Añadir el código para ejecutar acciones al finalizar la cuenta atrás
-        });
-
-        timeline.play();
-    }
-
-    /**
-     * A partir de segundos, formatear en minutos y segundos
-     *
-     * @param seconds
-     * @return
-     */
-    private String formatTime(int seconds) {
-        int minutes = seconds / 60;
-        int segundosRestantes = seconds % 60;
-        return String.format("%02d:%02d", minutes, segundosRestantes);
-    }
-
-    /**
-     * A partir de milisegundos, formatear en minutos, segundos y milisegundos
-     *
-     * @param milliseconds
-     * @return
-     */
-    private String formatTimeMillis(int milliseconds) {
-        int minutes = (milliseconds / 1000) / 60;
-        int seconds = (milliseconds / 1000) % 60;
-        int millis = milliseconds % 1000;
-        return String.format("%02d:%02d:%03d", minutes, seconds, millis);
-    }
-
-
-    /*private void initializeImageView() {
-        for (int i=0; i<hbox1.getChildren().size();i++) {
-            //"cast" the Node to be of type ImageView
-            ImageView imageView = (ImageView) hbox1.getChildren().get(i);
-            imageView.setImage(new Image("images/back_of_card.png"));
-            imageView.setUserData(i);
-
-            //register a click listener
-            imageView.setOnMouseClicked(event -> {
-                flipCard((int) imageView.getUserData());
-            });
-        }
-    }*/
-    @Override
-    public void close() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-}
-=======
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package logica;
-
-import common.Utils;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.util.Duration;
-
-/**
- *
- * @author ivan
- */
-public class GameController implements Initializable {
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
-    private ImageView carta1, carta2, carta3, carta4, carta5, carta6, carta7, carta8, carta9, carta10;
-
-    @FXML
-    private Label lbAciertos;
-
-    @FXML
-    private Label lbIntentos;
-
-    @FXML
-    private Label lbTiempo;
-    
-    @FXML
-    private Button btnExitGame;
-
-    private int cuentaAtras;
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // Reiniciamos los valores
-        lbIntentos.setText("0");
-        lbAciertos.setText("0");
-        cuentaAtras();
-
-    }
-    
     /**
      * Inicializar la cuenta atrás
      */
     private void cuentaAtras() {
         cuentaAtras = 10;
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(10), event -> {
-                    lbTiempo.setText(formatTimeMillis(cuentaAtras * 1000));
+        timeline = new Timeline(
+                new KeyFrame(Duration.seconds(0), event -> {
+                    lb_tiempo.setText(Utils.formatTime(cuentaAtras));
                     cuentaAtras--;
                 }),
                 new KeyFrame(Duration.seconds(1))
@@ -296,57 +173,21 @@ public class GameController implements Initializable {
         timeline.setCycleCount(cuentaAtras + 1);
         timeline.setOnFinished(event -> {
             Utils.alertTime();
-            try {
-                App.setRoot("hallOfFame");
-            } catch (IOException ex) {
-                Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            loadFXML.changeScreen("hallOfFame", btn_salirPartida);
+
         });
 
         timeline.play();
     }
-    
-    /**
-     * A partir de segundos, formatear en minutos y segundos
-     * @param seconds
-     * @return 
-     */
-    private String formatTime(int seconds) {
-        int minutes = seconds / 60;
-        int segundosRestantes = seconds % 60;
-        return String.format("%02d:%02d", minutes, segundosRestantes);
-    }
 
-    /**
-     * A partir de milisegundos, formatear en minutos, segundos y milisegundos
-     * @param milliseconds
-     * @return 
-     */
-    private String formatTimeMillis(int milliseconds) {
-        int minutes = (milliseconds / 1000) / 60;
-        int seconds = (milliseconds / 1000) % 60;
-        int millis = milliseconds % 1000;
-        return String.format("%02d:%02d:%03d", minutes, seconds, millis);
-    }
-    
     @FXML
-    void onActionExitGame(ActionEvent event) throws IOException {
-        App.setRoot("main");
+    void onActionSalirPartida(ActionEvent event) {
+        timeline.stop();
+        loadFXML.changeScreen("main", btn_salirPartida);
     }
 
-
-    /*private void initializeImageView() {
-        for (int i=0; i<hbox1.getChildren().size();i++) {
-            //"cast" the Node to be of type ImageView
-            ImageView imageView = (ImageView) hbox1.getChildren().get(i);
-            imageView.setImage(new Image("images/back_of_card.png"));
-            imageView.setUserData(i);
-
-            //register a click listener
-            imageView.setOnMouseClicked(event -> {
-                flipCard((int) imageView.getUserData());
-            });
-        }
-    }*/
+    @Override
+    public void close() {
+      
+    }
 }
->>>>>>> ad8e9a1d7f7c90b0ecf9e3a55dd3ca6bd3a80fa5

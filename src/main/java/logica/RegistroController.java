@@ -4,21 +4,17 @@
  */
 package logica;
 
-import common.IJuego;
 import common.Jugador;
-import common.Lookups;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javax.naming.NamingException;
+import static logica.App.juegoEJB;
 
 /**
  *
@@ -47,8 +43,6 @@ public class RegistroController implements Initializable {
     @FXML
     private TextArea lvLogger;
 
-    private IJuego juegoEJB;
-
     @FXML
     void onActionRegistrar(ActionEvent event) throws IOException, Exception {
         try {
@@ -68,11 +62,6 @@ public class RegistroController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            juegoEJB = Lookups.juegoEJBRemoteLookup();
-        } catch (NamingException ex) {
-            Logger.getLogger(RegistroController.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
 }

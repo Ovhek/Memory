@@ -63,10 +63,15 @@ public class GameController extends PresentationLayer implements Initializable {
     private int numColumnas, numFilas;
     private ArrayList<Integer> mazo = new ArrayList<>();
     private static final int NUM_COLUMNAS = 3;
+    private MazoDeCartas mazoDeCartas;
+    
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        mazoDeCartas = new MazoDeCartas();
+        mazoDeCartas.mezclar();
+        
         Manager.getInstance().addController(this);
 
         // Reiniciar los valores

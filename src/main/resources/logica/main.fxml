@@ -21,19 +21,24 @@
                   <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
                </VBox.margin>
             </Text>
-            <Button fx:id="btnNewGame" alignment="CENTER" mnemonicParsing="false" onAction="#onActionNewGame" text="New Game" textAlignment="CENTER">
+            <Button fx:id="btnNewGame" alignment="CENTER" mnemonicParsing="false" onAction="#onActionNewGame" text="Nueva Partida" textAlignment="CENTER">
                <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </Button>
             <Button fx:id="btnHallOfFame" alignment="CENTER" mnemonicParsing="false" onAction="#onActionHallOfFame" text="Hall Of Fame" textAlignment="CENTER">
                <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="btnExit" alignment="CENTER" mnemonicParsing="false" onAction="#onActionExit" text="Exit" textAlignment="CENTER">
+            <Button fx:id="btnLogout" alignment="CENTER" mnemonicParsing="false" onAction="#onActionLogout" text="Cerrar Sesión" textAlignment="CENTER">
                <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="btnExit" alignment="CENTER" mnemonicParsing="false" onAction="#onActionExit" text="Salir del Juego" textAlignment="CENTER">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </Button>
          </children>

@@ -12,7 +12,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import static logica.App.juegoEJB;
 import logica.utils.LoadFXML;
+import main.JuegoEJB;
 import presentacion.PresentationLayer;
 
 /**
@@ -32,11 +34,15 @@ public class MainController extends PresentationLayer implements Initializable {
 
     @FXML
     private Button btnNewGame;
+    
+    @FXML
+    private Button btnLogout;
 
     @FXML
     private Button btnExit;
 
     private LoadFXML loadFXML = new LoadFXML();
+    
 
     @FXML
     void onActionNewGame(ActionEvent event) throws IOException {
@@ -44,7 +50,7 @@ public class MainController extends PresentationLayer implements Initializable {
             Utils.alertLogin();
             loadFXML.changeScreen("logica/login.fxml", btnNewGame);
         } else {
-            loadFXML.changeScreen("logica/game.fxml", btnNewGame);
+            loadFXML.changeScreen("logica/dificultad.fxml", btnNewGame);
         }
     }
 
@@ -55,6 +61,18 @@ public class MainController extends PresentationLayer implements Initializable {
             loadFXML.changeScreen("logica/login.fxml", btnNewGame);
         } else {
             loadFXML.changeScreen("logica/hallOfFame.fxml", btnNewGame);
+        }
+    }
+    
+    @FXML
+    void onActionLogout(ActionEvent event) {
+        if (!Utils.login) {
+            Utils.alertLogin();
+            loadFXML.changeScreen("logica/login.fxml", btnNewGame);
+        } else {
+            Utils.login = false;
+            juegoEJB.cerrarSesion();
+            loadFXML.changeScreen("logica/login.fxml", btnNewGame);
         }
     }
 
@@ -75,7 +93,6 @@ public class MainController extends PresentationLayer implements Initializable {
 
     @Override
     public void close() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

@@ -1,7 +1,6 @@
 package logica;
 
 import common.IJuego;
-import common.Lookups;
 import common.Utils;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

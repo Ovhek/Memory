@@ -14,7 +14,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import static logica.App.juegoEJB;
 import logica.utils.LoadFXML;
-import main.JuegoEJB;
 import presentacion.PresentationLayer;
 
 /**

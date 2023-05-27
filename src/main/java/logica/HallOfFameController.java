@@ -4,15 +4,11 @@
  */
 package logica;
 
-import common.IJuego;
-import common.Lookups;
 import common.Partida;
 import common.Utils;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,7 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextArea;
-import javax.naming.NamingException;
 import static logica.App.juegoEJB;
 import logica.utils.LoadFXML;
 import presentacion.PresentationLayer;

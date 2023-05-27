@@ -4,7 +4,6 @@
  */
 package logica;
 
-import common.IJuego;
 import common.Jugador;
 import common.Lookups;
 import common.Utils;
@@ -52,11 +51,13 @@ public class LoginController extends PresentationLayer implements Initializable 
     private TextArea lvLogger;
 
     private LoadFXML loadFXML = new LoadFXML();
+    
+    public static Jugador jugador;
 
     @FXML
     void onActionLogin(ActionEvent event) throws IOException {
         try {
-            Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
+            jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
             juegoEJB.getSesion(jugador);
             Utils.login = true;
             loadFXML.changeScreen("logica/main.fxml", btnLogin);
@@ -73,11 +74,17 @@ public class LoginController extends PresentationLayer implements Initializable 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Manager.getInstance().addController(this);
+        if (!Utils.login) {
+            try {
+                juegoEJB = Lookups.juegoEJBRemoteLookup();
+            } catch (NamingException ex) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     @Override
     public void close() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

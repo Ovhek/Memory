@@ -1,7 +1,6 @@
 package logica;
 
 import common.IJuego;
-import common.Utils;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,16 +26,15 @@ public class App extends Application {
 
         // Ventana Principal
         FXMLLoader fxmlPrimary;
-
         fxmlPrimary = loadFXML("login");
         Scene scene = new Scene(fxmlPrimary.load());
 
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
-
-        Utils.playMusic();
-        //juegoEJB = Lookups.juegoEJBRemoteLookup();
+        
+        // Reproduce la música de fondo de la app al iniciarse
+        //Utils.playMusic();
 
     }
 

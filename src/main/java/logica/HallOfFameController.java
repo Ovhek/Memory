@@ -13,8 +13,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import static logica.App.juegoEJB;
 import logica.utils.LoadFXML;
@@ -26,21 +27,33 @@ import presentacion.PresentationLayer;
  */
 public class HallOfFameController extends PresentationLayer implements Initializable {
 
-    @FXML
+     @FXML
     private ResourceBundle resources;
 
     @FXML
     private URL location;
-    
+
     @FXML
     private MenuButton btnDificultad;
 
     @FXML
-    private ListView<Partida> lvScores;
+    private TableView<Partida> tvScores;
+    
+    @FXML
+    private TableColumn<?, ?> colJugador;
+    
+    @FXML
+    private TableColumn<?, ?> colIntentos;
+
+    @FXML
+    private TableColumn<?, ?> colTiempo;
+
+    @FXML
+    private TableColumn<?, ?> colPuntuacion;
 
     @FXML
     private Button btnMenuPrincipal;
-
+    
     @FXML
     private TextArea lvLogger;
 
@@ -49,22 +62,22 @@ public class HallOfFameController extends PresentationLayer implements Initializ
     @FXML
     void onActionPuntuacionFacil(ActionEvent event) throws Exception {
         btnDificultad.setText("Fácil");
-        lvScores.getItems().clear();
-        lvScores.getItems().addAll(juegoEJB.getHallOfGame(0));
+        tvScores.getItems().clear();
+        tvScores.getItems().addAll(juegoEJB.getHallOfGame(0));
     }
 
     @FXML
     void onActionPuntuacionNormal(ActionEvent event) throws Exception {
         btnDificultad.setText("Normal");
-        lvScores.getItems().clear();
-        lvScores.getItems().addAll(juegoEJB.getHallOfGame(1));
+        tvScores.getItems().clear();
+        tvScores.getItems().addAll(juegoEJB.getHallOfGame(1));
     }
 
     @FXML
     void onActionPuntuacionDificil(ActionEvent event) throws Exception {
         btnDificultad.setText("Difícil");
-        lvScores.getItems().clear();
-        lvScores.getItems().addAll(juegoEJB.getHallOfGame(2));
+        tvScores.getItems().clear();
+        tvScores.getItems().addAll(juegoEJB.getHallOfGame(2));
     }
 
     @FXML
@@ -80,9 +93,10 @@ public class HallOfFameController extends PresentationLayer implements Initializ
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Manager.getInstance().addController(this);
-
+        
+        // Cargamos todas las puntuaciones del Hall Of Fame e indicamos el momento exacto de la actualización de los resultados
         try {
-            lvScores.getItems().addAll(juegoEJB.getHallOfGame());
+            tvScores.getItems().addAll(juegoEJB.getHallOfGame());
             lvLogger.appendText("Las puntuaciones están actualizadas a " + Utils.getCurrentDateTime() + "\n");
         } catch (Exception ex) {
             lvLogger.appendText("No se han podido cargar las puntuaciones.\n");

@@ -24,10 +24,10 @@ import presentacion.PresentationLayer;
  */
 public class RegistroController extends PresentationLayer implements Initializable {
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
+    @FXML
     private ResourceBundle resources;
 
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    @FXML
     private URL location;
 
     @FXML
@@ -50,6 +50,7 @@ public class RegistroController extends PresentationLayer implements Initializab
     @FXML
     void onActionRegistrar(ActionEvent event) throws IOException, Exception {
         try {
+            // Instanciamos un nuevo jugador según las credenciales del formulario e intentamos registrarlo en la BBDD
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
             juegoEJB.registrarUsuario(jugador);
             lvLogger.appendText("El usuario se ha registrado correctamente.\n");

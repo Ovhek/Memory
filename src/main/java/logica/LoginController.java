@@ -5,6 +5,7 @@
 package logica;
 
 import common.Jugador;
+import common.JugadorException;
 import common.Lookups;
 import common.Utils;
 import java.io.IOException;
@@ -29,39 +30,40 @@ import presentacion.PresentationLayer;
  */
 public class LoginController extends PresentationLayer implements Initializable {
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
+    @FXML
     private ResourceBundle resources;
 
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    @FXML
     private URL location;
 
-    @FXML // fx:id="btnLogin"
-    private Button btnLogin; // Value injected by FXMLLoader
+    @FXML
+    private Button btnLogin;
 
-    @FXML // fx:id="txtEmail"
-    private TextField txtEmail; // Value injected by FXMLLoader
+    @FXML
+    private TextField txtEmail;
 
-    @FXML // fx:id="btnRegistro"
-    private Button btnRegistro; // Value injected by FXMLLoader
+    @FXML
+    private Button btnRegistro;
 
-    @FXML // fx:id="txtUsuario"
-    private TextField txtUsuario; // Value injected by FXMLLoader
+    @FXML
+    private TextField txtUsuario;
 
     @FXML
     private TextArea lvLogger;
 
     private LoadFXML loadFXML = new LoadFXML();
-    
-    public static Jugador jugador;
 
     @FXML
     void onActionLogin(ActionEvent event) throws IOException {
         try {
-            jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
+            // Instanciamos un nuevo jugador según las credenciales del formulario e intentamos iniciar sesión
+            Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
             juegoEJB.getSesion(jugador);
+            
+            // Cambiamos la variable login conforme se el usuario se ha logueado y cambiamos de pantalla
             Utils.login = true;
             loadFXML.changeScreen("logica/main.fxml", btnLogin);
-        } catch (Exception ex) {
+        } catch (JugadorException ex) {
             lvLogger.appendText("El usuario no ha podido loguearse. Revisa las credenciales.\n");
         }
     }
@@ -74,6 +76,8 @@ public class LoginController extends PresentationLayer implements Initializable 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Manager.getInstance().addController(this);
+        
+        // Si el usuario no está logueado, se crea una conexión con el servidor
         if (!Utils.login) {
             try {
                 juegoEJB = Lookups.juegoEJBRemoteLookup();

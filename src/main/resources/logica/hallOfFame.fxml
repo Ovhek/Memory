@@ -33,11 +33,17 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </VBox.margin>
                   </MenuButton>
-                        <ListView fx:id="lvScores" prefHeight="200.0" prefWidth="200.0">
-                            <VBox.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                            </VBox.margin>
-                        </ListView>
+                  <TableView fx:id="tvScores" prefHeight="200.0" prefWidth="200.0">
+                    <columns>
+                      <TableColumn fx:id="colJugador" editable="false" prefWidth="203.0" text="Jugador" />
+                      <TableColumn fx:id="colIntentos" editable="false" minWidth="0.0" prefWidth="137.0" text="Intentos" />
+                        <TableColumn fx:id="colTiempo" editable="false" minWidth="0.0" prefWidth="190.0" text="Tiempo restante" />
+                        <TableColumn fx:id="colPuntuacion" editable="false" minWidth="0.0" prefWidth="249.0" text="Puntuación" />
+                    </columns>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </TableView>
                     </children>
                <VBox.margin>
                   <Insets />

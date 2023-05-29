@@ -6,16 +6,25 @@
 package logica;
 
 import common.Carta;
+import common.CartaMemory;
 import common.MazoDeCartas;
 import common.Utils;
+import java.awt.Toolkit;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,6 +36,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -34,6 +45,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javax.imageio.ImageIO;
 import logica.utils.LoadFXML;
 import presentacion.PresentationLayer;
 
@@ -70,40 +82,57 @@ public class GameController extends PresentationLayer implements Initializable {
 
     private Timeline timeline;
     private int numColumnas, numFilas;
-    private ArrayList<Integer> mazo = new ArrayList<>();
+
     private static final int NUM_COLUMNAS = 3;
     private MazoDeCartas mazoDeCartas;
+    private ArrayList<CartaMemory> listaCartas;
+    private Image imagen;
+    private Image imagenBack;
+    private int count;
+    private int index_1;
+    private int aciertos, intentos;
+    private ImageView backImageView;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        mazoDeCartas = new MazoDeCartas();
-        mazoDeCartas.mezclar();
+        try {
+            Manager.getInstance().addController(this);
+            count = 0;
+            confDificultad();
+            index_1 = -1;
+            mazoDeCartas = new MazoDeCartas();
+            mazoDeCartas.mezclar();
 
-        Manager.getInstance().addController(this);
+            listaCartas = (ArrayList<CartaMemory>) mazoDeCartas.getCartas();
 
-        // Reiniciar los valores
-        lb_intento.setText("0");
-        lb_aciertos.setText("0");
-        for (int i = 0; i < 26; i++) {
-            mazo.add(i);
+            imagenBack = setByteToImage(listaCartas.get(0).getBackOfCardImage());
+
+            // Reiniciar los valores
+            aciertos = 0;
+            intentos = 0;
+
+            lb_intento.setText(String.valueOf(intentos));
+            lb_aciertos.setText(String.valueOf(aciertos));
+
+            confGrid();
+
+            cuentaAtras();
+        } catch (IOException ex) {
+            Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        confGrid();
-
-        cuentaAtras();
     }
 
     private void confGrid() {
-        int numCartas = mazo.size();
+        int numCartas = mazoDeCartas.getNumeroCartas();
         int numColumnas = calculateNumColumns(numCartas); // Calcular el número de columnas en función del número de cartas
         int numFilas = (int) Math.ceil((double) numCartas / numColumnas); // Calcular el número de filas
 
         int rowIndex = 0; // Índice de fila actual
         int columnIndex = 0; // Índice de columna actual
 
-        for (Integer carta : mazo) {
+        for (CartaMemory carta : listaCartas) {
             // Crear el ImageView para la carta
-            ImageView imageView = new ImageView(new Image("/images/back_of_card.png"));
+            ImageView imageView = new ImageView(imagenBack);
             imageView.setFitWidth(100); // Ajusta el ancho según tus necesidades
             imageView.setPreserveRatio(true);
 
@@ -111,8 +140,17 @@ public class GameController extends PresentationLayer implements Initializable {
             gt_tablero.add(imageView, columnIndex, rowIndex);
 
             imageView.setOnMouseClicked(event -> {
-                int index = mazo.indexOf(carta);
-                flipCard(index, imageView);
+                int index = listaCartas.indexOf(carta);
+                try {
+                    if (count == 0) {
+                        backImageView = imageView;
+                    }
+                    flipCard(index, imageView);
+                } catch (IOException ex) {
+                    Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             });
 
             // Actualizar los índices de fila y columna
@@ -146,14 +184,55 @@ public class GameController extends PresentationLayer implements Initializable {
         return Math.min(numColumnas, numCartas);
     }
 
-    private void flipCard(int index, ImageView imageView) {
+    private void flipCard(int index, ImageView imageView) throws IOException, InterruptedException {
         // Obtener la carta correspondiente al índice
+        CartaMemory carta = listaCartas.get(index);
+        
+        if (!carta.isGirada()) {
 
-        // Obtener la imagen correspondiente a la carta volteada
-        Image frontImage = new Image("/images/10_of_clubs.png");
+            if (count == 0) {
+                imagen = setByteToImage(carta.getImage());
+                imageView.setImage(imagen);
+                carta.setGirada(true);
+                count = 1;
+                index_1 = index;
+            } else if (count == 1) {
+                imagen = setByteToImage(carta.getImage());
+                imageView.setImage(imagen);
+                carta.setGirada(true);
+                CartaMemory carta_1 = listaCartas.get(index_1);
+                intentos++;
+                if (carta.isMismaCarta(carta_1)) {
+                    aciertos++;
+                    lb_aciertos.setText(String.valueOf(aciertos));
+                    carta.setMatched(true);
+                    carta_1.setMatched(true);
 
-        // Girar la carta mostrando la imagen frontal
-        imageView.setImage(frontImage);
+                } else {
+
+                    Task<Void> task = new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            Thread.sleep(1000); // Pausa durante 1 segundo
+                            return null;
+                        }
+                    };
+
+                    task.setOnSucceeded(e -> {
+                        carta.setGirada(false);
+                        carta_1.setGirada(false);
+                        imageView.setImage(imagenBack);
+                        backImageView.setImage(imagenBack);
+                    });
+
+                    new Thread(task).start();
+
+                }
+                lb_intento.setText(String.valueOf(intentos));
+                count = 0;
+            }
+
+        }
 
     }
 
@@ -161,7 +240,7 @@ public class GameController extends PresentationLayer implements Initializable {
      * Inicializar la cuenta atrás
      */
     private void cuentaAtras() {
-        cuentaAtras = 10;
+
         timeline = new Timeline(
                 new KeyFrame(Duration.seconds(0), event -> {
                     lb_tiempo.setText(Utils.formatTime(cuentaAtras));
@@ -186,8 +265,50 @@ public class GameController extends PresentationLayer implements Initializable {
         loadFXML.changeScreen("logica/main.fxml", btn_salirPartida);
     }
 
+    private Image setByteToImage(byte[] imageBytes) throws IOException {
+
+        ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+
+        // Lee la imagen desde el ByteArrayInputStream
+        BufferedImage bufferedImage = ImageIO.read(bis);
+
+        // Convierte el BufferedImage a un objeto javafx.scene.image.Image
+        Image image = convertToJavaFXImage(bufferedImage);
+
+        return image;
+
+    }
+
+    private static Image convertToJavaFXImage(BufferedImage bufferedImage) {
+        WritableImage wr = null;
+        if (bufferedImage != null) {
+            wr = new WritableImage(bufferedImage.getWidth(), bufferedImage.getHeight());
+            PixelWriter pw = wr.getPixelWriter();
+            for (int x = 0; x < bufferedImage.getWidth(); x++) {
+                for (int y = 0; y < bufferedImage.getHeight(); y++) {
+                    pw.setArgb(x, y, bufferedImage.getRGB(x, y));
+                }
+            }
+        }
+        return wr;
+    }
+
+    private void confDificultad() {
+        switch (Utils.dificultad) {
+            case 0:
+                cuentaAtras = 180;
+                break;
+            case 1:
+                cuentaAtras = 120;
+                break;
+            case 2:
+                cuentaAtras = 60;
+                break;
+        }
+    }
+
     @Override
     public void close() {
-      
+
     }
 }

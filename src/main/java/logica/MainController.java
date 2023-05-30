@@ -42,7 +42,7 @@ public class MainController extends PresentationLayer implements Initializable {
 
     private LoadFXML loadFXML = new LoadFXML();
     
-
+    // Comprueba si el usuario está logueado. False: Vuelve al login
     @FXML
     void onActionNewGame(ActionEvent event) throws IOException {
         if (!Utils.login) {
@@ -52,7 +52,8 @@ public class MainController extends PresentationLayer implements Initializable {
             loadFXML.changeScreen("logica/dificultad.fxml", btnNewGame);
         }
     }
-
+    
+    // Comprueba si el usuario está logueado. False: Vuelve al login
     @FXML
     void onActionHallOfFame(ActionEvent event) throws IOException {
         if (!Utils.login) {
@@ -63,6 +64,7 @@ public class MainController extends PresentationLayer implements Initializable {
         }
     }
     
+    // Comprueba si el usuario está logueado. False: Vuelve al login
     @FXML
     void onActionLogout(ActionEvent event) {
         if (!Utils.login) {
@@ -74,7 +76,8 @@ public class MainController extends PresentationLayer implements Initializable {
             loadFXML.changeScreen("logica/login.fxml", btnNewGame);
         }
     }
-
+    
+    // Comprueba si el usuario está logueado. False: Vuelve al login
     @FXML
     void onActionExit(ActionEvent event) throws IOException {
         if (!Utils.login) {

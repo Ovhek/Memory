@@ -5,7 +5,6 @@
 package logica;
 
 import common.Jugador;
-import common.JugadorException;
 import common.Lookups;
 import common.Utils;
 import java.io.IOException;

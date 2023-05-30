@@ -36,19 +36,22 @@ public class DificultadController extends PresentationLayer implements Initializ
     private Button btnFacil;
     
     private LoadFXML loadFXML = new LoadFXML();
-
+    
+    // Modificamos el valor de la dificultad antes de ir a la pantalla de juego
     @FXML
     void onActionFacil(ActionEvent event) {
         Utils.dificultad = 0;
         loadFXML.changeScreen("logica/game.fxml", btnFacil);
     }
-
+    
+    // Modificamos el valor de la dificultad antes de ir a la pantalla de juego
     @FXML
     void onActionNormal(ActionEvent event) {
         Utils.dificultad = 1;
         loadFXML.changeScreen("logica/game.fxml", btnNormal);
     }
-
+    
+    // Modificamos el valor de la dificultad antes de ir a la pantalla de juego
     @FXML
     void onActionDificil(ActionEvent event) {
         Utils.dificultad = 2;

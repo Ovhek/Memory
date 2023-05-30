@@ -5,33 +5,29 @@
  */
 package logica;
 
-import common.Carta;
 import common.CartaMemory;
 import common.MazoDeCartas;
+import common.Partida;
+import common.PartidaException;
 import common.Utils;
-import java.awt.Toolkit;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
+import static logica.App.juegoEJB;
+import static logica.App.jugadorApp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.VPos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -43,7 +39,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Screen;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import javax.imageio.ImageIO;
 import logica.utils.LoadFXML;
@@ -65,9 +60,6 @@ public class GameController extends PresentationLayer implements Initializable {
     private URL location;
 
     @FXML
-    private Label lb_aciertos;
-
-    @FXML
     private Label lb_intento;
 
     @FXML
@@ -78,8 +70,6 @@ public class GameController extends PresentationLayer implements Initializable {
 
     private LoadFXML loadFXML = new LoadFXML();
 
-    private int cuentaAtras;
-
     private Timeline timeline;
     private int numColumnas, numFilas;
 
@@ -88,36 +78,38 @@ public class GameController extends PresentationLayer implements Initializable {
     private ArrayList<CartaMemory> listaCartas;
     private Image imagen;
     private Image imagenBack;
-    private int count;
     private int index_1;
-    private int aciertos, intentos;
+    private int intentos;
     private ImageView backImageView;
+    private Partida partida;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             Manager.getInstance().addController(this);
-            count = 0;
-            confDificultad();
+
+            partida = new Partida(jugadorApp, Utils.dificultad);
+            //Empezar partida
+            juegoEJB.empezarPartida(partida);
+
             index_1 = -1;
-            mazoDeCartas = new MazoDeCartas();
-            mazoDeCartas.mezclar();
+            mazoDeCartas = juegoEJB.obtenerMazoMezclado();
 
             listaCartas = (ArrayList<CartaMemory>) mazoDeCartas.getCartas();
 
             imagenBack = setByteToImage(listaCartas.get(0).getBackOfCardImage());
 
             // Reiniciar los valores
-            aciertos = 0;
             intentos = 0;
 
             lb_intento.setText(String.valueOf(intentos));
-            lb_aciertos.setText(String.valueOf(aciertos));
 
             confGrid();
 
             cuentaAtras();
         } catch (IOException ex) {
+            Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PartidaException ex) {
             Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -141,14 +133,17 @@ public class GameController extends PresentationLayer implements Initializable {
 
             imageView.setOnMouseClicked(event -> {
                 int index = listaCartas.indexOf(carta);
+
                 try {
-                    if (count == 0) {
+                    if (juegoEJB.getVoleo()) {
                         backImageView = imageView;
                     }
                     flipCard(index, imageView);
                 } catch (IOException ex) {
                     Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InterruptedException ex) {
+                    Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
                     Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
@@ -184,31 +179,26 @@ public class GameController extends PresentationLayer implements Initializable {
         return Math.min(numColumnas, numCartas);
     }
 
-    private void flipCard(int index, ImageView imageView) throws IOException, InterruptedException {
+    private void flipCard(int index, ImageView imageView) throws IOException, InterruptedException, Exception {
         // Obtener la carta correspondiente al índice
         CartaMemory carta = listaCartas.get(index);
-        
+
         if (!carta.isGirada()) {
 
-            if (count == 0) {
+            if (juegoEJB.getVoleo()) {
                 imagen = setByteToImage(carta.getImage());
                 imageView.setImage(imagen);
                 carta.setGirada(true);
-                count = 1;
+                juegoEJB.voltearCarta();
                 index_1 = index;
-            } else if (count == 1) {
+            } else if (!juegoEJB.getVoleo()) {
                 imagen = setByteToImage(carta.getImage());
                 imageView.setImage(imagen);
                 carta.setGirada(true);
                 CartaMemory carta_1 = listaCartas.get(index_1);
-                intentos++;
-                if (carta.isMismaCarta(carta_1)) {
-                    aciertos++;
-                    lb_aciertos.setText(String.valueOf(aciertos));
-                    carta.setMatched(true);
-                    carta_1.setMatched(true);
 
-                } else {
+                intentos = juegoEJB.sumarIntentos();
+                if (!juegoEJB.cartasConciden(carta, carta_1)) {
 
                     Task<Void> task = new Task<Void>() {
                         @Override
@@ -227,9 +217,13 @@ public class GameController extends PresentationLayer implements Initializable {
 
                     new Thread(task).start();
 
+                } else if (juegoEJB.comprobarVictoria()) {
+                    timeline.stop();
+                    juegoEJB.terminarPartida();
+                    loadFXML.changeScreen("logica/hallOfFame.fxml", btn_salirPartida);
                 }
                 lb_intento.setText(String.valueOf(intentos));
-                count = 0;
+                juegoEJB.voltearCarta();
             }
 
         }
@@ -243,15 +237,19 @@ public class GameController extends PresentationLayer implements Initializable {
 
         timeline = new Timeline(
                 new KeyFrame(Duration.seconds(0), event -> {
+                    int cuentaAtras = juegoEJB.obtenerTiempoPartida();
                     lb_tiempo.setText(Utils.formatTime(cuentaAtras));
-                    cuentaAtras--;
                 }),
                 new KeyFrame(Duration.seconds(1))
         );
 
-        timeline.setCycleCount(cuentaAtras + 1);
         timeline.setOnFinished(event -> {
             Utils.alertTime();
+            try {
+                juegoEJB.terminarPartida();
+            } catch (Exception ex) {
+                Logger.getLogger(GameController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             loadFXML.changeScreen("logica/hallOfFame.fxml", btn_salirPartida);
 
         });
@@ -260,9 +258,10 @@ public class GameController extends PresentationLayer implements Initializable {
     }
 
     @FXML
-    void onActionSalirPartida(ActionEvent event) {
-        timeline.stop();
-        loadFXML.changeScreen("logica/main.fxml", btn_salirPartida);
+    void onActionSalirPartida(ActionEvent event) throws Exception {
+        /*timeline.stop();
+        juegoEJB.terminarPartida();
+        loadFXML.changeScreen("logica/main.fxml", btn_salirPartida);*/
     }
 
     private Image setByteToImage(byte[] imageBytes) throws IOException {
@@ -291,20 +290,6 @@ public class GameController extends PresentationLayer implements Initializable {
             }
         }
         return wr;
-    }
-
-    private void confDificultad() {
-        switch (Utils.dificultad) {
-            case 0:
-                cuentaAtras = 180;
-                break;
-            case 1:
-                cuentaAtras = 120;
-                break;
-            case 2:
-                cuentaAtras = 60;
-                break;
-        }
     }
 
     @Override

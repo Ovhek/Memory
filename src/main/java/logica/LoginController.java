@@ -21,6 +21,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javax.naming.NamingException;
 import static logica.App.juegoEJB;
+import static logica.App.jugadorApp;
 import logica.utils.LoadFXML;
 import presentacion.PresentationLayer;
 
@@ -59,7 +60,7 @@ public class LoginController extends PresentationLayer implements Initializable 
             // Instanciamos un nuevo jugador según las credenciales del formulario e intentamos iniciar sesión
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
             juegoEJB.getSesion(jugador);
-            
+            jugadorApp = jugador;
             // Cambiamos la variable login conforme se el usuario se ha logueado y cambiamos de pantalla
             Utils.login = true;
             loadFXML.changeScreen("logica/main.fxml", btnLogin);

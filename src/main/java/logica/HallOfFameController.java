@@ -8,7 +8,10 @@ import common.Partida;
 import common.Utils;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,6 +20,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.PropertyValueFactory;
 import static logica.App.juegoEJB;
 import logica.utils.LoadFXML;
 import presentacion.PresentationLayer;
@@ -27,7 +31,7 @@ import presentacion.PresentationLayer;
  */
 public class HallOfFameController extends PresentationLayer implements Initializable {
 
-     @FXML
+    @FXML
     private ResourceBundle resources;
 
     @FXML
@@ -38,27 +42,29 @@ public class HallOfFameController extends PresentationLayer implements Initializ
 
     @FXML
     private TableView<Partida> tvScores;
-    
-    @FXML
-    private TableColumn<?, ?> colJugador;
-    
-    @FXML
-    private TableColumn<?, ?> colIntentos;
 
     @FXML
-    private TableColumn<?, ?> colTiempo;
+    private TableColumn<Partida, String> colJugador;
 
     @FXML
-    private TableColumn<?, ?> colPuntuacion;
+    private TableColumn<Partida, Integer> colIntentos;
+
+    @FXML
+    private TableColumn<Partida, Integer> colTiempo;
+
+    @FXML
+    private TableColumn<Partida, Integer> colPuntuacion;
 
     @FXML
     private Button btnMenuPrincipal;
-    
+
     @FXML
     private TextArea lvLogger;
 
     private LoadFXML loadFXML = new LoadFXML();
-    
+
+    ObservableList<Partida> partidas;
+
     @FXML
     void onActionPuntuacionFacil(ActionEvent event) throws Exception {
         btnDificultad.setText("Fácil");
@@ -93,10 +99,17 @@ public class HallOfFameController extends PresentationLayer implements Initializ
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Manager.getInstance().addController(this);
-        
+
+        colJugador.setCellValueFactory(new PropertyValueFactory<>("jugador"));
+        colIntentos.setCellValueFactory(new PropertyValueFactory<>("numIntentos"));
+        colTiempo.setCellValueFactory(new PropertyValueFactory<>("tiempoRestante"));
+        colPuntuacion.setCellValueFactory(new PropertyValueFactory<>("puntos"));
+
         // Cargamos todas las puntuaciones del Hall Of Fame e indicamos el momento exacto de la actualización de los resultados
         try {
-            tvScores.getItems().addAll(juegoEJB.getHallOfGame());
+            partidas = FXCollections.observableArrayList(juegoEJB.getHallOfGame());
+            System.out.println("PARTIDAS: " + partidas);
+            tvScores.setItems(partidas);
             lvLogger.appendText("Las puntuaciones están actualizadas a " + Utils.getCurrentDateTime() + "\n");
         } catch (Exception ex) {
             lvLogger.appendText("No se han podido cargar las puntuaciones.\n");

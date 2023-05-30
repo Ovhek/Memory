@@ -317,8 +317,9 @@ public class GameController extends PresentationLayer implements Initializable {
                     timeline.stop();
 
                     //Terminamos la partida
-                    juegoEJB.terminarPartida();
+                    Partida p = juegoEJB.terminarPartida();
 
+                    Utils.alertVictoria(p.getPuntos());
                     //Vamos al HallOfFame
                     loadFXML.changeScreen("logica/hallOfFame.fxml", btn_salirPartida);
                 }

@@ -56,6 +56,7 @@ public class RegistroController extends PresentationLayer implements Initializab
             lvLogger.appendText("El usuario se ha registrado correctamente.\n");
             loadFXML.changeScreen("logica/login.fxml", btnRegistro);
         } catch (Exception ex){
+            ex.printStackTrace();
             lvLogger.appendText("El usuario no se ha podido registrar.\n");
         }
     }

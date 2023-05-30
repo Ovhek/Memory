@@ -104,6 +104,7 @@ public class LoadFXML {
             currentStage.show();
             
         } catch (IOException ex) {
+            ex.printStackTrace();
             System.out.println(ex.getMessage());
         }
     }

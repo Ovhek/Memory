@@ -1,6 +1,7 @@
 package logica;
 
 import common.IJuego;
+import common.Jugador;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ public class App extends Application {
 
     private static Scene scene;
     public static IJuego juegoEJB;
+    public static Jugador jugadorApp;
 
     private static Manager manager;
     private static Stage stage;

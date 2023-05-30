@@ -29,7 +29,6 @@
                     </VBox.margin>
                 </GridPane>
                 <Label fx:id="lb_intento" text="Intentos: " />
-                <Label fx:id="lb_aciertos" text="Aciertos:" />
                 <Label fx:id="lb_tiempo" text="Tiempo:">
                <VBox.margin>
                   <Insets bottom="24.0" />

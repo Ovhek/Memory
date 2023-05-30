@@ -59,7 +59,7 @@ public class LoginController extends PresentationLayer implements Initializable 
         try {
             // Instanciamos un nuevo jugador según las credenciales del formulario e intentamos iniciar sesión
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
-            juegoEJB.getSesion(jugador);
+            jugador = juegoEJB.getSesion(jugador);
             jugadorApp = jugador;
             // Cambiamos la variable login conforme se el usuario se ha logueado y cambiamos de pantalla
             Utils.login = true;
@@ -77,7 +77,7 @@ public class LoginController extends PresentationLayer implements Initializable 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Manager.getInstance().addController(this);
-        
+
         // Si el usuario no está logueado, se crea una conexión con el servidor
         if (!Utils.login) {
             try {

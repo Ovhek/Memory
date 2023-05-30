@@ -217,7 +217,8 @@ public class GameController extends PresentationLayer implements Initializable {
 
                     new Thread(task).start();
 
-                } else if (juegoEJB.comprobarVictoria()) {
+                }
+                if (juegoEJB.comprobarVictoria()) {
                     timeline.stop();
                     juegoEJB.terminarPartida();
                     loadFXML.changeScreen("logica/hallOfFame.fxml", btn_salirPartida);
@@ -234,15 +235,15 @@ public class GameController extends PresentationLayer implements Initializable {
      * Inicializar la cuenta atrás
      */
     private void cuentaAtras() {
-
+        int cuentaAtras = juegoEJB.obtenerTiempoPartida();
         timeline = new Timeline(
                 new KeyFrame(Duration.seconds(0), event -> {
-                    int cuentaAtras = juegoEJB.obtenerTiempoPartida();
+
                     lb_tiempo.setText(Utils.formatTime(cuentaAtras));
                 }),
                 new KeyFrame(Duration.seconds(1))
         );
-
+        timeline.setCycleCount(300);
         timeline.setOnFinished(event -> {
             Utils.alertTime();
             try {
@@ -259,9 +260,9 @@ public class GameController extends PresentationLayer implements Initializable {
 
     @FXML
     void onActionSalirPartida(ActionEvent event) throws Exception {
-        /*timeline.stop();
+        timeline.stop();
         juegoEJB.terminarPartida();
-        loadFXML.changeScreen("logica/main.fxml", btn_salirPartida);*/
+        loadFXML.changeScreen("logica/main.fxml", btn_salirPartida);
     }
 
     private Image setByteToImage(byte[] imageBytes) throws IOException {

@@ -4,6 +4,8 @@
  */
 package logica;
 
+import common.Partida;
+import common.PartidaException;
 import common.Utils;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -11,6 +13,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import static logica.App.juegoEJB;
+import static logica.App.jugadorApp;
 import logica.utils.LoadFXML;
 import presentacion.PresentationLayer;
 
@@ -38,20 +42,22 @@ public class DificultadController extends PresentationLayer implements Initializ
     private LoadFXML loadFXML = new LoadFXML();
 
     @FXML
-    void onActionFacil(ActionEvent event) {
+    void onActionFacil(ActionEvent event) throws PartidaException {
         Utils.dificultad = 0;
+
         loadFXML.changeScreen("logica/game.fxml", btnFacil);
     }
 
     @FXML
-    void onActionNormal(ActionEvent event) {
+    void onActionNormal(ActionEvent event) throws PartidaException {
         Utils.dificultad = 1;
         loadFXML.changeScreen("logica/game.fxml", btnNormal);
     }
 
     @FXML
-    void onActionDificil(ActionEvent event) {
+    void onActionDificil(ActionEvent event) throws PartidaException {
         Utils.dificultad = 2;
+        
         loadFXML.changeScreen("logica/game.fxml", btnDificil);
     }
     

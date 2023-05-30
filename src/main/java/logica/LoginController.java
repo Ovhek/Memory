@@ -57,14 +57,16 @@ public class LoginController extends PresentationLayer implements Initializable 
     @FXML
     void onActionLogin(ActionEvent event) throws IOException {
         try {
+            if(!Utils.login) juegoEJB = Lookups.juegoEJBRemoteLookup();
+            
             // Instanciamos un nuevo jugador según las credenciales del formulario e intentamos iniciar sesión
             Jugador jugador = new Jugador(txtUsuario.getText(), txtEmail.getText());
-            juegoEJB.getSesion(jugador);
+            jugador = juegoEJB.getSesion(jugador);
             jugadorApp = jugador;
             // Cambiamos la variable login conforme se el usuario se ha logueado y cambiamos de pantalla
             Utils.login = true;
             loadFXML.changeScreen("logica/main.fxml", btnLogin);
-        } catch (JugadorException ex) {
+        } catch (Exception ex) {
             lvLogger.appendText("El usuario no ha podido loguearse. Revisa las credenciales.\n");
         }
     }

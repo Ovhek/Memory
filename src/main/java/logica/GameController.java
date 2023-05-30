@@ -236,13 +236,13 @@ public class GameController extends PresentationLayer implements Initializable {
     private void cuentaAtras() {
 
         timeline = new Timeline(
-                new KeyFrame(Duration.seconds(0), event -> {
+                new KeyFrame(Duration.seconds(1), event -> {
                     int cuentaAtras = juegoEJB.obtenerTiempoPartida();
+                    System.out.println(cuentaAtras);
                     lb_tiempo.setText(Utils.formatTime(cuentaAtras));
-                }),
-                new KeyFrame(Duration.seconds(1))
+                })
         );
-
+        timeline.setCycleCount(juegoEJB.getTiempoMaximo());
         timeline.setOnFinished(event -> {
             Utils.alertTime();
             try {
@@ -255,13 +255,14 @@ public class GameController extends PresentationLayer implements Initializable {
         });
 
         timeline.play();
+        
     }
 
     @FXML
     void onActionSalirPartida(ActionEvent event) throws Exception {
-        /*timeline.stop();
+        timeline.stop();
         juegoEJB.terminarPartida();
-        loadFXML.changeScreen("logica/main.fxml", btn_salirPartida);*/
+        loadFXML.changeScreen("logica/main.fxml", btn_salirPartida);
     }
 
     private Image setByteToImage(byte[] imageBytes) throws IOException {

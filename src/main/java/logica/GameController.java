@@ -198,11 +198,12 @@ public class GameController extends PresentationLayer implements Initializable {
                 CartaMemory carta_1 = listaCartas.get(index_1);
 
                 intentos = juegoEJB.sumarIntentos();
-                if (!juegoEJB.cartasConciden(carta, carta_1)) {
+                if (!juegoEJB.cartasConciden(carta, carta_1,mazoDeCartas.getCartas().indexOf(carta),mazoDeCartas.getCartas().indexOf(carta_1))) {
 
                     Task<Void> task = new Task<Void>() {
                         @Override
                         protected Void call() throws Exception {
+                            gt_tablero.getChildren().forEach(child -> child.setDisable(true));
                             Thread.sleep(1000); // Pausa durante 1 segundo
                             return null;
                         }
@@ -213,6 +214,7 @@ public class GameController extends PresentationLayer implements Initializable {
                         carta_1.setGirada(false);
                         imageView.setImage(imagenBack);
                         backImageView.setImage(imagenBack);
+                        gt_tablero.getChildren().forEach(child -> child.setDisable(false));
                     });
 
                     new Thread(task).start();

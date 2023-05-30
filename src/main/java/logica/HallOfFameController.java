@@ -8,11 +8,8 @@ import common.Partida;
 import common.Utils;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -63,9 +60,8 @@ public class HallOfFameController extends PresentationLayer implements Initializ
     private TextArea lvLogger;
 
     private LoadFXML loadFXML = new LoadFXML();
-
-    ObservableList<Partida> partidas;
-
+    
+    // Filtro para obtener las puntuaciones del modo fácil
     @FXML
     void onActionPuntuacionFacil(ActionEvent event) throws Exception {
         btnDificultad.setText("Fácil");
@@ -73,20 +69,23 @@ public class HallOfFameController extends PresentationLayer implements Initializ
         tvScores.getItems().addAll(juegoEJB.getHallOfGame(0));
     }
 
+    // Filtro para obtener las puntuaciones del modo normal
     @FXML
     void onActionPuntuacionNormal(ActionEvent event) throws Exception {
         btnDificultad.setText("Normal");
         tvScores.getItems().clear();
         tvScores.getItems().addAll(juegoEJB.getHallOfGame(1));
     }
-
+    
+    // Filtro para obtener las puntuaciones del modo difícil
     @FXML
     void onActionPuntuacionDificil(ActionEvent event) throws Exception {
         btnDificultad.setText("Difícil");
         tvScores.getItems().clear();
         tvScores.getItems().addAll(juegoEJB.getHallOfGame(2));
     }
-
+    
+    // Comprueba si el usuario está logueado. False: Vuelve al login
     @FXML
     void onActionMenuPrincipal(ActionEvent event) throws IOException {
         if (!Utils.login) {
@@ -100,7 +99,8 @@ public class HallOfFameController extends PresentationLayer implements Initializ
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Manager.getInstance().addController(this);
-
+        
+        // Enlazamos las columnas de la tabla con las propiedades del objeto
         colJugador.setCellValueFactory(cellData ->{
             String nombre = cellData.getValue().getJugador().getNombre();
             return new SimpleStringProperty(nombre);
@@ -109,11 +109,10 @@ public class HallOfFameController extends PresentationLayer implements Initializ
         colTiempo.setCellValueFactory(new PropertyValueFactory<>("tiempoRestante"));
         colPuntuacion.setCellValueFactory(new PropertyValueFactory<>("puntos"));
 
-        // Cargamos todas las puntuaciones del Hall Of Fame e indicamos el momento exacto de la actualización de los resultados
+        // Cargamos las puntuaciones del Hall Of Fame e indicamos el momento exacto de la actualización de los resultados
         try {
-            partidas = FXCollections.observableArrayList(juegoEJB.getHallOfGame());
-            System.out.println("PARTIDAS: " + partidas);
-            tvScores.setItems(partidas);
+            tvScores.getItems().clear();
+            tvScores.getItems().addAll(juegoEJB.getHallOfGame());
             lvLogger.appendText("Las puntuaciones están actualizadas a " + Utils.getCurrentDateTime() + "\n");
         } catch (Exception ex) {
             lvLogger.appendText("No se han podido cargar las puntuaciones.\n");

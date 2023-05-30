@@ -60,6 +60,7 @@ public class RegistroController extends PresentationLayer implements Initializab
         }
     }
     
+    // Vuelve a la página de login
     @FXML
     void onActionBack(ActionEvent event) throws IOException {
          loadFXML.changeScreen("logica/login.fxml", btnRegistro);

@@ -78,7 +78,7 @@ public class LoginController extends PresentationLayer implements Initializable 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Manager.getInstance().addController(this);
-        
+
         // Si el usuario no está logueado, se crea una conexión con el servidor
         if (!Utils.login) {
             try {
